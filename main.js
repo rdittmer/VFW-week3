@@ -68,6 +68,7 @@ window.addEventListener( "DOMContentLoaded", function(){
 		for( var i = 0, len = localStorage.length; i < len; i++ )
 		{
 			var makeli      = document.createElement( 'li' );
+			var linksLi     = document.createElement( 'li' );
 			makeList.appendChild( makeli );
 			var key         = localStorage.key( i );
 			var value       = localStorage.getItem( key );
@@ -80,8 +81,32 @@ window.addEventListener( "DOMContentLoaded", function(){
 				makeSubList.appendChild( makeSubli );
 				var optSubText      = obj[n][0] + " " + obj[n][1];
 				makeSubli.innerHTML = optSubText;
+				makeSubList.appendChild( linksLi );
 			} 
+			makeItemLinks( localStorage.key( i ), linksLi );
 		}
+	}
+	
+	function makeItemLinks( key, linksLi )
+	{
+		var editLink         = document.createElement( 'n' );
+		editLink.href        = "#";
+		editLink.key         = key;
+		var editText         = "Edit Bill";
+		editLink.addEventListener( "click", editItem );
+		editLink.innerHTML   = editText;
+		linksLi.appendChild( editLink );
+		
+		var breakTag         = document.createElement( 'br' );
+		linksLi.appendChild( breakTag );
+		
+		var deleteLink       = document.createElement( 'n' );
+		deleteLink.href      = "#";
+		deleteLink.key       = key;
+		var deleteText       = "Delete Bill";
+		deleteLink.addEventListener( "click", deleteItem );
+		deleteLink.innerHTML = deleteText;
+		linksLi.appendChild( deleteLink );
 	}
 	
 	function toggleControls( n )
