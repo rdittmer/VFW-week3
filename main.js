@@ -139,9 +139,55 @@ window.addEventListener( "DOMContentLoaded", function(){
 		editSubmit.key         = this.key;
 	}
 	
-	function validate()
+	function validate(e)
 	{
+		var getBillTypes = $( 'billTypes' );
+		var getPayTo     = $( 'payto' );
+		var getPayAmount = $( 'payamount' );
 		
+		errMessage.innerHTML      = "";
+		getBillTypes.style.border = "1px solid black";
+		getPayTo.style.border     = "1px solid black";
+		getPayAmount.style.border = "1px solid black";
+		
+		var messageArray = [];
+		
+		if ( getBillTypes.value === "<-Select Bill Type->" )
+		{
+			var billTypeError         = "Please choose a Bill type.";
+			getBillTypes.style.border = "1px solid red";
+			messageArray.push( billTypeError );
+		}
+		
+		if ( getPayTo.value === "" )
+		{
+			var payToError        = "Please enter a Payee.";
+			getPayTo.style.border = "1px solid red";
+			messageArray.push( payToError );
+		}
+		
+		if ( getPayAmount.value === "" )
+		{
+			var payAmountError        = "Please enter an amount.";
+			getPayAmount.style.border = "1px solid red";
+			messageArray.push( payAmountError );
+		}
+		
+		if ( messageArray.length >= 1 )
+		{
+			for ( var i = 0, j = messageArray.length; i < j; i++ )
+			{
+				var txt = document.createElement( 'li' );
+				txt.innerHTML = messageArray[i];
+				errMessage.appendChild( txt );
+			}
+			e.preventDefault();
+			return false;
+		}
+		else
+		{
+			storeData();
+		}
 	}
 	
 	function toggleControls( n )
@@ -180,14 +226,15 @@ window.addEventListener( "DOMContentLoaded", function(){
 	}
 	
 	var billTypes = [ "<-Select Bill Type->", "Utilities", "Rent/House", "Auto", "Credit Card", "Other" ];
-	makeBillTypes();
 	var paywithValue;
+	var errMessage = $( 'errors' );
+	makeBillTypes();
 	
 	var displayLink = $( 'displayData' );
 	displayLink.addEventListener( "click", getData );
 	var clearLink   = $( 'clear' );
 	clearLink.addEventListener( "click", clearLocal );
 	var save        = $( 'submit' );
-	save.addEventListener( "click", validate() );
+	save.addEventListener( "click", validate );
 	
 });
