@@ -1,5 +1,5 @@
 // Ryan Dittmer
-// Project 2
+// Project 3
 // VFW 1201
 // Add Bill js 
 
@@ -31,12 +31,12 @@ window.addEventListener( "DOMContentLoaded", function(){
 		getSelectedRadio();
 		var item       = {};
 		
-		item.billtype  = ["Bill Type:"  , $('billTypes').value];
-		item.payto     = ["Pay To:"     , $('payto').value];
-		item.payamount = ["Pay Amount:" , $('payamount').value];
+		item.billtype  = ["Bill Type:"  , $( 'billTypes' ).value];
+		item.payto     = ["Pay To:"     , $( 'payto' ).value];
+		item.payamount = ["Pay Amount:" , $( 'payamount' ).value];
 		item.paywith   = ["Pay With:"   , paywithValue];
-		item.paydate   = ["Pay Date:"   , $('paydate').value];
-		item.notes     = ["Notes"       , $('notes').value];
+		item.paydate   = ["Pay Date:"   , $( 'paydate' ).value];
+		item.notes     = ["Notes"       , $( 'notes' ).value];
 		
 		localStorage.setItem( id, JSON.stringify( item ) );
 		alert( "Bill Added!" );
@@ -104,9 +104,44 @@ window.addEventListener( "DOMContentLoaded", function(){
 		deleteLink.href      = "#";
 		deleteLink.key       = key;
 		var deleteText       = "Delete Bill";
-		deleteLink.addEventListener( "click", deleteItem );
+		//deleteLink.addEventListener( "click", deleteItem );
 		deleteLink.innerHTML = deleteText;
 		linksLi.appendChild( deleteLink );
+	}
+	
+	function editItem()
+	{
+		var value = localStorage.getItem( this.key );
+		var item  = JSON.parse( value );
+		
+		toggleControls( "off" );
+		
+		$( 'billTypes' ).value = item.billtype[1];
+		$( 'payto' ).value     = item.payto[1];
+		$( 'payamount' ).value = item.payamount[1];
+		var radios = document.forms[0].paytype;
+		for ( var i = 0; i < radios.length; i++ )
+		{
+			if ( radios[i].value == "Credit Card" && item.paywith[1] == "Credit Card" )
+				radios[i].setAttribute( "checked", "checked" );
+			else if ( radios[i].value == "Bank Account" && item.paywith[1] == "Bank Account" )
+				radios[i].setAttribute( "checked", "checked" );
+			else if ( radios[i].value == "Check" && item.paywith[1] == "Check" )
+				radios[i].setAttribute( "checked", "checked" );
+		}
+		$( 'paydate' ).value   = item.paydate[1];
+		$( 'notes' ).value     = item.notes[1];
+		
+		save.removeEventListener( "click", storeData );
+		$( 'submit' ).value    = "Edit Bill";
+		var editSubmit         = $( 'submit' );
+		editSubmit.addEventListener( "click", validate );
+		editSubmit.key         = this.key;
+	}
+	
+	function validate()
+	{
+		
 	}
 	
 	function toggleControls( n )
@@ -153,6 +188,6 @@ window.addEventListener( "DOMContentLoaded", function(){
 	var clearLink   = $( 'clear' );
 	clearLink.addEventListener( "click", clearLocal );
 	var save        = $( 'submit' );
-	save.addEventListener( "click", storeData );
+	save.addEventListener( "click", validate() );
 	
 });
