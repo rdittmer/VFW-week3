@@ -25,9 +25,16 @@ window.addEventListener( "DOMContentLoaded", function(){
 		selectLi.appendChild( makeSelect );
 	}
 	
-	function storeData()
+	function storeData( key )
 	{
-		var id         = Math.floor( Math.random() * 10001 );
+		if ( !key ) 
+		{
+			var id     = Math.floor( Math.random() * 10001 );
+		}
+		else
+		{
+			id         = key;
+		}
 		getSelectedRadio();
 		var item       = {};
 		
@@ -186,7 +193,7 @@ window.addEventListener( "DOMContentLoaded", function(){
 		}
 		else
 		{
-			storeData();
+			storeData( this.key );
 		}
 	}
 	
